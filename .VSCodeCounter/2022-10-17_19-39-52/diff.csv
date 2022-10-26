@@ -1,0 +1,6 @@
+"filename", "language", "C++", "GLSL", "comment", "blank", "total"
+"d:\DEV\projects\Project_1\src\planet.cpp", "C++", 1, 0, 0, 0, 1
+"d:\DEV\projects\Project_1\src\shaders\shader.frag", "GLSL", 0, 17, 0, 4, 21
+"d:\DEV\projects\Project_1\src\shaders\shader.vert", "GLSL", 0, 5, 0, 1, 6
+"d:\DEV\projects\Project_1\src\update.hpp", "C++", 5, 0, 1, 0, 6
+"Total", "-", 6, 22, 1, 5, 34

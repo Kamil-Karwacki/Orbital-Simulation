@@ -1,0 +1,38 @@
+Date : 2022-10-05 18:34:09
+Directory : d:\DEV\projects\Project_1\src
+Total : 14 files,  161 codes, -4 comments, 8 blanks, all 165 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         14 |        161 |         -4 |          8 |        165 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------+------------+------------+------------+------------+------------+
+| path                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------+------------+------------+------------+------------+------------+
+| .                                        |         14 |        161 |         -4 |          8 |        165 |
++------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                 | language | code       | comment    | blank      | total      |
++------------------------------------------+----------+------------+------------+------------+------------+
+| d:\DEV\projects\Project_1\src\gizmos.cpp | C++      |          1 |          0 |          0 |          1 |
+| d:\DEV\projects\Project_1\src\init.cpp   | C++      |          3 |         -1 |          0 |          2 |
+| d:\DEV\projects\Project_1\src\init.hpp   | C++      |          1 |          0 |         -1 |          0 |
+| d:\DEV\projects\Project_1\src\input.cpp  | C++      |          9 |          0 |          2 |         11 |
+| d:\DEV\projects\Project_1\src\input.hpp  | C++      |          1 |          0 |         -1 |          0 |
+| d:\DEV\projects\Project_1\src\math.hpp   | C++      |         48 |         -2 |          2 |         48 |
+| d:\DEV\projects\Project_1\src\mesh.cpp   | C++      |          3 |         -2 |         -1 |          0 |
+| d:\DEV\projects\Project_1\src\mesh.hpp   | C++      |          1 |          0 |          0 |          1 |
+| d:\DEV\projects\Project_1\src\planet.cpp | C++      |          4 |          0 |          1 |          5 |
+| d:\DEV\projects\Project_1\src\planet.hpp | C++      |          1 |          0 |          0 |          1 |
+| d:\DEV\projects\Project_1\src\shader.cpp | C++      |          4 |          0 |          1 |          5 |
+| d:\DEV\projects\Project_1\src\shader.hpp | C++      |          4 |          1 |          1 |          6 |
+| d:\DEV\projects\Project_1\src\start.hpp  | C++      |          0 |          0 |         -1 |         -1 |
+| d:\DEV\projects\Project_1\src\update.hpp | C++      |         81 |          0 |          5 |         86 |
+| Total                                    |          |        161 |         -4 |          8 |        165 |
++------------------------------------------+----------+------------+------------+------------+------------+

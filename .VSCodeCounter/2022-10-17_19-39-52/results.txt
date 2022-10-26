@@ -1,0 +1,46 @@
+Date : 2022-10-17 19:39:52
+Directory : d:\DEV\projects\Project_1\src
+Total : 20 files,  923 codes, 25 comments, 161 blanks, all 1109 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         18 |        885 |         25 |        152 |      1,062 |
+| GLSL     |          2 |         38 |          0 |          9 |         47 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                              | files      | code       | comment    | blank      | total      |
++---------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                 |         20 |        923 |         25 |        161 |      1,109 |
+| shaders                                           |          2 |         38 |          0 |          9 |         47 |
++---------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                          | language | code       | comment    | blank      | total      |
++---------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\DEV\projects\Project_1\src\camera.hpp          | C++      |          9 |          0 |          1 |         10 |
+| d:\DEV\projects\Project_1\src\gizmos.cpp          | C++      |         13 |          0 |          1 |         14 |
+| d:\DEV\projects\Project_1\src\gizmos.hpp          | C++      |          4 |          0 |          3 |          7 |
+| d:\DEV\projects\Project_1\src\globals.hpp         | C++      |         10 |          0 |          1 |         11 |
+| d:\DEV\projects\Project_1\src\init.cpp            | C++      |         57 |          0 |          9 |         66 |
+| d:\DEV\projects\Project_1\src\init.hpp            | C++      |          7 |          0 |          1 |          8 |
+| d:\DEV\projects\Project_1\src\input.cpp           | C++      |         67 |          1 |         13 |         81 |
+| d:\DEV\projects\Project_1\src\input.hpp           | C++      |         11 |          0 |          2 |         13 |
+| d:\DEV\projects\Project_1\src\main.cpp            | C++      |         31 |          0 |         12 |         43 |
+| d:\DEV\projects\Project_1\src\math.hpp            | C++      |         87 |          7 |         10 |        104 |
+| d:\DEV\projects\Project_1\src\mesh.cpp            | C++      |        267 |         11 |         45 |        323 |
+| d:\DEV\projects\Project_1\src\mesh.hpp            | C++      |         23 |          0 |          5 |         28 |
+| d:\DEV\projects\Project_1\src\planet.cpp          | C++      |         43 |          0 |          6 |         49 |
+| d:\DEV\projects\Project_1\src\planet.hpp          | C++      |         19 |          0 |          2 |         21 |
+| d:\DEV\projects\Project_1\src\shader.cpp          | C++      |         63 |          0 |         11 |         74 |
+| d:\DEV\projects\Project_1\src\shader.hpp          | C++      |         11 |          1 |          2 |         14 |
+| d:\DEV\projects\Project_1\src\shaders\shader.frag | GLSL     |         24 |          0 |          6 |         30 |
+| d:\DEV\projects\Project_1\src\shaders\shader.vert | GLSL     |         14 |          0 |          3 |         17 |
+| d:\DEV\projects\Project_1\src\start.hpp           | C++      |         38 |          3 |         11 |         52 |
+| d:\DEV\projects\Project_1\src\update.hpp          | C++      |        125 |          2 |         17 |        144 |
+| Total                                             |          |        923 |         25 |        161 |      1,109 |
++---------------------------------------------------+----------+------------+------------+------------+------------+
