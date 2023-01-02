@@ -6,46 +6,9 @@
 #include <glm/gtx/io.hpp>
 #include <iostream>
 #include <algorithm>
-#define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 #include "globals.hpp"
 #include "math.hpp"
-
-Mesh LoadMesh(char* path) {
-    Mesh mesh;
-    std::cout << "Creating mesh " << path << std::endl;
-    tinyobj::attrib_t attrib;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-    std::string warn, err;
-
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path)) {
-        throw std::runtime_error(warn + err);
-    }
-    std::vector<Vertex> verticies;
-    std::vector<unsigned int> indices;
-    
-    for(size_t i=0; i<attrib.vertices.size(); i+=3) {
-        Vertex vertex{};
-        vertex.position = glm::vec3(attrib.vertices[i], attrib.vertices[i+1], attrib.vertices[i+2]);
-        vertex.normal = glm::vec3(attrib.normals[i], attrib.normals[i+1], attrib.normals[i+2]);
-        verticies.emplace_back(vertex);
-    }
-    for(const auto& shape : shapes) {
-        for(const auto& mesh : shape.mesh.indices) {
-            indices.push_back(mesh.vertex_index);
-        }
-    }
-
-    mesh.vertices = verticies;
-    mesh.indices = indices;
-    SetupMesh(mesh);
-    return mesh;
-}
 
 void SetupMesh(Mesh &mesh) {
     std::cout << "Setting up mesh" << std::endl;
@@ -114,7 +77,7 @@ Mesh CreateIcoSphere(unsigned int depth) {
     int topTriangleVertices;
     int bottomTriangleVertices;
 
-    // Creating vertices for top part of octahedron
+    // Create vertices for top part of octahedron
     for(int i=1; i<depth+1; i++) {
         float ratio = (1.0f/(depth+1)) * i;
         for(int l=0; l<4; l++) {  // for every one of four edges
@@ -290,13 +253,15 @@ Mesh CreateIcoSphere(unsigned int depth) {
     glm::vec3 center = glm::vec3(0.0f);
 
     for(int i=0; i<mesh.vertices.size(); i++) {
-        glm::vec3 pointer = (mesh.vertices[i].position - center);
+        glm::vec3 pointer = mesh.vertices[i].position - center;
         mesh.vertices[i].normal = pointer;
         float distance = glm::length(pointer);
 
         mesh.vertices[i].position = (1.0f/distance) * pointer;
     }
 
+    std::cout << "Created ico sphere vertices: " << mesh.vertices.size() << " indices: " << mesh.indices.size() << " " << glfwGetTime() << "\n";
+    
     glGenVertexArrays(1, &mesh.VAO);
     glGenBuffers(1, &mesh.VBO);
     glGenBuffers(1, &mesh.EBO);
@@ -315,6 +280,9 @@ Mesh CreateIcoSphere(unsigned int depth) {
 
     glEnableVertexAttribArray(1);	
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
+
+    glEnableVertexAttribArray(2);	
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::color));
 
     glBindVertexArray(0);
     return mesh;

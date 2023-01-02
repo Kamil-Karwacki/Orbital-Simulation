@@ -18,6 +18,7 @@ int main()
 {
     window = InitGLFW(scr_width, scr_height);
     InitOpenGL();
+    lastFrame = glfwGetTime();
 
     Start();
 
@@ -27,16 +28,16 @@ int main()
         glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
         currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
 
         ProcessInput(window);
 
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        
         Update();
 
         glfwSwapBuffers(window);
+        lastFrame = currentFrame;
     }
 
     return 0;

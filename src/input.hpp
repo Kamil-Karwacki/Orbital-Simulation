@@ -1,9 +1,11 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 void ProcessInput(GLFWwindow* window);
 void MouseCallback(GLFWwindow* window, double xpos, double ypos);
 void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset);
 
 inline bool firstMouse = true;
 inline float yaw =  -90.0f;

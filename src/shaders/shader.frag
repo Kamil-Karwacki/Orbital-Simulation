@@ -1,13 +1,13 @@
 #version 330 core
 out vec4 FragColor;
 
-#define MAX_LIGHTS 128
+#define MAX_LIGHTS 64
 
-in vec3 Normal;  
+in vec3 Normal;
 in vec3 FragPos;  
+in vec3 vertCol;
   
 uniform vec3 viewPos; 
-uniform vec3 objectColor;
 
 struct Light {
     float constant;
@@ -21,10 +21,9 @@ uniform Light light[MAX_LIGHTS];
 
 void main()
 {
-    bool isEmissive;
-    vec3 result;
+    vec3 result = vec3(0.0);
     for(int i=0; i<MAX_LIGHTS; i++) {
-        if(light[i].col.x != 0 && light[i].col.y != 0 && light[i].col.z != 0) {
+        if(light[i].constant != 0 && light[i].col.x != 0) {
             float distance = length(light[i].pos - FragPos);
             float attenuation = 1.0 / (light[i].constant + light[i].linear * distance + light[i].quadratic * (distance * distance)); 
             float ambientStrength = 0.05;
@@ -40,14 +39,8 @@ void main()
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
             vec3 specular = specularStrength * spec * light[i].col * attenuation;  
 
-            // if distance between light src and frag pos is equal, then its emmissive surface
-            if(distance <= light[i].radius * 1.1)
-                isEmissive = true;
-            else
-                result += (ambient + diffuse + specular) * objectColor;
+            result += (ambient + diffuse + specular) * vertCol;
         }
     }
-    if(isEmissive)
-        result = objectColor;
     FragColor = vec4(result, 1.0);
 } 

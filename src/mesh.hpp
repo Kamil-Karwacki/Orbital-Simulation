@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <glm/glm.hpp>
 
 struct Vertex{
     glm::vec3 position;
     glm::vec3 normal;
+    glm::vec3 color;
 };
 
 struct Mesh{
@@ -16,7 +18,13 @@ struct Mesh{
     unsigned int VBO, VAO, EBO;
 };
 
-Mesh LoadMesh(char* path);
+struct Noise {
+    uint32_t seed;
+    uint32_t octaves;
+    uint32_t persistance;
+    float strength;
+};
+
 void SetupMesh(Mesh& mesh_);
 void DrawMesh(Mesh mesh, unsigned int shaderProgram);
 
@@ -24,4 +32,3 @@ Mesh CreateIcoSphere(unsigned int depth = 1);
 
 inline Mesh IcoSphere3;
 inline Mesh IcoSphere6;
-inline Mesh PlanetSphere;
