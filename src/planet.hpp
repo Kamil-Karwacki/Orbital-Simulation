@@ -22,7 +22,6 @@ struct HeightCol {
     float col[3];
 };
 
-
 class Planet {
 public:
     Planet(PlanetData data);
@@ -36,15 +35,13 @@ public:
     glm::vec3 position = glm::vec3(0.0f);
     glm::vec3 rotation = glm::vec3(0.0f);
     glm::vec3 scale = glm::vec3(1.0f);
-    std::vector<glm::vec3> lastPoints;
-    glm::vec4 col;
+    uint32_t depth;
 
     float noiseStrength = 0.2f;
     uint32_t seed;
     std::vector<Noise> noises;
     std::vector<HeightCol> heights;
     std::vector<glm::vec3> appliedNoise;
-    uint32_t depth;
 };
 
 
@@ -58,20 +55,28 @@ void UpdateColors(Planet &planet);
 void ApplyNoise(Planet& planet, Noise noise);
 
 struct UI_create {
-    bool createPlanet = false, canCreatePlanet;
+    bool createPlanet = false; // is user creating planet
+    bool canCreatePlanet; // can user create planet
+
     char buf[255];
-    float mass = 0, radius = 1;
-    float pos[3], vel[3];
+    float mass = 0;
+    float radius = 1;
+    float pos[3];
+    float vel[3];
     float col[4];
-    float windowWidth = 300;
+
     double seed = 0;
     float noiseStrength = 0.2f;
     uint32_t octaves = 2, persistance = 2;
     Planet* previewPlanet;
-    bool regenerateMesh;
-    bool changedParams1 = false;
     std::vector<Noise> noises;
     std::vector<HeightCol> heights;
+    bool regeneratePlanet; // should planets mesh be regenerated
+    bool changedParams1 = false; // has user changed one of parameters
+
+    float windowWidth = 300;
+    unsigned int LOD;
+    bool regenerateButton = false; // should show button to regenerate planet
 };
 
 struct UI_update {
@@ -80,12 +85,16 @@ struct UI_update {
     float emissionStrength;
     float emissionCol[4];
     float col[4];
-    bool firstRun = true; // should planet data be updated into ui
+    float radius;
+
+
     std::vector<Noise> noises;
     Noise tempNoise{}, lastTempNoise{};
     std::vector<HeightCol> heights;
     HeightCol tempHeightCol{};
-    bool regeneratePlanet = false;
+
+    bool firstRun = true; // should planet data be updated into ui
+    bool regeneratePlanet = false; // should planets mesh be regenerated
     float windowWidth = 200;
 };
 

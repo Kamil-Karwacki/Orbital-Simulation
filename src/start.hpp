@@ -26,6 +26,12 @@ void Start() {
     IcoSphere3 = CreateIcoSphere(3);
     IcoSphere6 = CreateIcoSphere(6);
 
+    for(auto& v : IcoSphere3.vertices) {
+        v.color = glm::vec3(1.0f);
+    }
+
+    SetupMesh(IcoSphere3);
+
     PlanetData earthData{};
     earthData.name = "earth";
     earthData.mass = 81000;
@@ -49,7 +55,7 @@ void Start() {
     Planet sun(sunData);
 
     PlanetData tempData{};
-    tempData.name = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+    tempData.name = "";
     tempData.mass = 0;
     tempData.radius = 0;
     tempData.pos = glm::vec3(0.0f);
@@ -60,12 +66,6 @@ void Start() {
     tempData.depth = 40;
     ui_create.previewPlanet = new Planet(tempData);
     ui_create.heights = ui_create.previewPlanet->heights;
-
-    for(int i=0; i<planets.size(); i++) {
-        std::cout << planets[i].name << "\n";
-    }
-
-    
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

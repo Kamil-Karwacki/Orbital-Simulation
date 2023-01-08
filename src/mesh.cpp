@@ -29,6 +29,9 @@ void SetupMesh(Mesh &mesh) {
 
     glEnableVertexAttribArray(1);	
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
+
+    glEnableVertexAttribArray(2);	
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::color));
     
     glBindVertexArray(0);
 }

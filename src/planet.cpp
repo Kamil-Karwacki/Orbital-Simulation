@@ -24,7 +24,6 @@ Planet::Planet(PlanetData data) {
     tempHeightCol.height = 0;
     heights.emplace_back(tempHeightCol);
     
-    col = data.col;
     position = data.pos;
     scale = glm::vec3(data.radius);
     vel = data.vel;
@@ -47,7 +46,7 @@ void DrawPlanet(Planet planet, unsigned int shaderProgram) {
 }
 
 void UpdatePlanetsVel(Planet &planet1, Planet &planet2) {
-    if(planet1.name == planet2.name || planet1.mass == 0 || planet2.mass == 0) // if its the same planet
+    if(planet1.name == planet2.name || planet1.mass == 0 || planet2.mass == 0)
         return;
     glm::vec3 forceDir = planet1.position - planet2.position;
     glm::vec3 force = (glm::normalize(forceDir) * GRAVITATIONAL_CONST * planet1.mass * planet2.mass) / glm::length2(forceDir);
@@ -58,7 +57,7 @@ void UpdatePlanetsVel(Planet &planet1, Planet &planet2) {
 }
 
 void UpdatePlanetsVel2(Planet &planet1, Planet &planet2, float timeStep) {
-    if(planet1.name == planet2.name || planet1.mass == 0 || planet2.mass == 0) // if its the same planet
+    if(planet1.name == planet2.name || planet1.mass == 0 || planet2.mass == 0)
         return;
     glm::vec3 forceDir = planet1.position - planet2.position;
     glm::vec3 force = (glm::normalize(forceDir) * GRAVITATIONAL_CONST * planet1.mass * planet2.mass) / glm::length2(forceDir);

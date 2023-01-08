@@ -13,3 +13,6 @@ private:
 
 inline Shader shader1;
 inline Shader shader2;
+inline Shader shader3;
+inline Shader shader4;
+inline Shader shader5;

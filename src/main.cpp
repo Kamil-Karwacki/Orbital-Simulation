@@ -14,6 +14,7 @@
 int framebufferWidth, framebufferHeight;
 float currentFrame, lastFrame;
 
+
 int main()
 {
     window = InitGLFW(scr_width, scr_height);
@@ -21,6 +22,15 @@ int main()
     lastFrame = glfwGetTime();
 
     Start();
+    glEnable(GL_DEPTH_TEST);
+
+    shader5.Use();
+    glUniform1i(glGetUniformLocation(shader5.program, "scene"), 0);
+    glUniform1i(glGetUniformLocation(shader5.program, "bloomBlur"), 1);
+
+
+    shader4.Use();
+    glUniform1i(glGetUniformLocation(shader4.program, "image"), 0);
 
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -31,7 +41,10 @@ int main()
 
         ProcessInput(window);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         Update();
