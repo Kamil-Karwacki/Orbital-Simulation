@@ -36,6 +36,8 @@ inline bool MouseRaycast() {
     float ray_length = 10.0f;
     
     for(int i=0; i<planets.size(); i++) {
+        if(planets[i].name == "")
+            continue;
         glm::vec3 center = planets[i].position;
         glm::vec3 rayStart = mainCam.pos + ray_wor;
         glm::vec3 rayEnd = mainCam.pos + (ray_wor) * ray_length;
@@ -45,9 +47,7 @@ inline bool MouseRaycast() {
         float delta = b*b - 4*a*c;
         float d1 = (-b-sqrt(delta))/(2*a);
         float d2 = (-b+sqrt(delta))/(2*a);
-        std::cout << "Delta " << delta
-                  << "\nd1 " << d1
-                  << "\nd2 " << d2 << "\n";
+        std::cout << "Delta " << delta << " d1 " << d1 << " d2 " << d2 << "\n" << planets[i].name << "\n\n";
         if(delta >= 0.0f && (d1 > 0.0f || d2 > 0.0f)) {
             std::cout << "Hit " << planets[i].name << "\n";
             currentPlanet = &planets[i];

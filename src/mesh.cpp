@@ -41,7 +41,6 @@ void DrawMesh(Mesh mesh, unsigned int shaderProgram) {
     model = glm::translate(model, mesh.position);
     model = glm::scale(model, mesh.scale);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-    glUniform3f(glGetUniformLocation(shaderProgram, "objectColor"), mesh.color.x, mesh.color.y, mesh.color.z);
 
 
     glBindVertexArray(mesh.VAO);

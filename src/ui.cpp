@@ -40,6 +40,7 @@ void DrawUI() {
             ui_update.noises = currentPlanet->noises;
             ui_update.heights = currentPlanet->heights;
             ui_update.radius = currentPlanet->scale.x;
+            ui_update.LOD = currentPlanet->depth;
         }
 
         ImGui::SetNextWindowPos(ImVec2(5, mainManipulationWindowSize.y + 20), ImGuiCond_Once); 
@@ -49,6 +50,7 @@ void DrawUI() {
         ImGui::Text("Velocity");         ImGui::SameLine(); ImGui::InputFloat3("##velocity", ui_update.vel);
         ImGui::Text("EmissionStrength"); ImGui::SameLine(); ImGui::InputFloat("##emissionstrength", &ui_update.emissionStrength);
         ImGui::Text("Radius");           ImGui::SameLine(); ImGui::InputFloat("##radius", &ui_update.radius);
+       // ImGui::Text("Level of detail");  ImGui::SameLine(); ImGui::InputFloat("##lod", &ui_update.LOD);
 
         if(currentPlanet->emissionStrength > 0) {
             ImGui::Text("EmissionColor");    ImGui::ColorPicker4("##emissioncolor", ui_update.emissionCol);
@@ -172,8 +174,10 @@ void DrawUI() {
 
         if(ImGui::Button("Delete")) {
             for(int i=0; i<planets.size(); i++) {
-                if(planets[i].name == currentPlanet->name)
+                if(planets[i].name == currentPlanet->name) {
                     planets.erase(planets.begin() + i);
+                    predictMesh.erase(predictMesh.begin() + i);
+                }
             }
             currentPlanet = nullptr;
         }
@@ -339,6 +343,7 @@ void DrawUI() {
                 UpdateColors(planets.back());
 
                 planets.back().emissionCol = glm::vec4(1.0f);
+                predictMesh.emplace_back(IcoSphere3);
             } else {
                 ui_create.canCreatePlanet = true;
             }

@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/io.hpp>
+#include <random>
 
 #include "init.hpp"
 #include "input.hpp"
@@ -32,12 +33,40 @@ void Start() {
 
     SetupMesh(IcoSphere3);
 
+    std::random_device rd;
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> distr1(-30000, 40000);
+
+    for(int i=0; i<sizeof(stars)/sizeof(Mesh); i++) {
+        float x = distr1(gen);
+        float y = distr1(gen);
+        float z = distr1(gen);
+
+        while(abs(x) + abs(y) + abs(z) < 90000) {
+            x*=1.01f;
+            y*=1.01f;
+            z*=1.01f;
+        }
+
+        while(abs(x) + abs(y) + abs(z) > 90000) {
+            x*=0.99f;
+            y*=0.99f;
+            z*=0.99f;
+        }
+
+        glm::vec3 pos = glm::vec3(x, y, z);
+
+        stars[i] = IcoSphere3;
+        stars[i].scale = glm::vec3(100);
+        starsPos[i] = pos;
+    }
+
     PlanetData earthData{};
     earthData.name = "earth";
     earthData.mass = 81000;
     earthData.radius = 1.0f;
     earthData.pos = glm::vec3(0.0f);
-    earthData.vel = glm::vec3(0.006f, 0.00f, 0.0f);
+    earthData.vel = glm::vec3(0.0075f, 0.00f, 0.0f);
     earthData.col =  glm::vec4(0.0f, 0.7f, 0.0f, 1.0f);
     earthData.depth = 60;
     Planet earth(earthData);
@@ -66,6 +95,10 @@ void Start() {
     tempData.depth = 40;
     ui_create.previewPlanet = new Planet(tempData);
     ui_create.heights = ui_create.previewPlanet->heights;
+
+    for(int i=0; i<planets.size(); i++) {
+        predictMesh.emplace_back(IcoSphere3);
+    }
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

@@ -32,3 +32,8 @@ Mesh CreateIcoSphere(unsigned int depth = 1);
 
 inline Mesh IcoSphere3;
 inline Mesh IcoSphere6;
+
+inline Mesh stars[50];
+inline glm::vec3 starsPos[50];
+
+inline std::vector<Mesh> predictMesh;

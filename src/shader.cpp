@@ -32,7 +32,6 @@ void Shader::Init(const char *vertexPath, const char *fragmentPath) {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         throw std::runtime_error(std::string("Fragment shader compilation error: ") + infoLog);
     }
-    std::cout << "Successfully compiled shaders: " << vertexPath << " and " << fragmentPath << "\n";
 
     program = glCreateProgram();
     glAttachShader(program, vertexShader);
@@ -48,7 +47,7 @@ void Shader::Init(const char *vertexPath, const char *fragmentPath) {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    std::cout << "Successfully created and linked shader program\n";
+    std::cout << "Successfully created and linked shader program\n\n";
 }
 
 void Shader::Use() {
@@ -69,6 +68,5 @@ std::string Shader::ReadFile(const char* path) {
     file.close();
 
     file.close();
-    std::cout << "Successfully readen shader: " << path << "\n";
     return contents;
 }

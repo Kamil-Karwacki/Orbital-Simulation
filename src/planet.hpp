@@ -96,7 +96,9 @@ struct UI_update {
     bool firstRun = true; // should planet data be updated into ui
     bool regeneratePlanet = false; // should planets mesh be regenerated
     float windowWidth = 200;
+    unsigned int LOD;
 };
+
 
 inline UI_create ui_create{};
 inline UI_update ui_update{};

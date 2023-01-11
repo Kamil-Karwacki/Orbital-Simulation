@@ -17,3 +17,4 @@ inline float fov = 65;
 inline bool bloom = true;
 inline float exposure = 1.0f;
 inline int bloomPasses = 20;
+inline unsigned int predictionDepth = 100;

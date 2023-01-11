@@ -19,7 +19,9 @@
 
 void Update() {
     shader1.Use();
-    DrawPlanet(*ui_create.previewPlanet, shader1.program);
+    if(ui_create.createPlanet)
+        DrawPlanet(*ui_create.previewPlanet, shader1.program);
+        
     projection = glm::perspective(glm::radians(fov), (float)scr_width / (float)scr_height, 0.01f, 100000.0f);
     glUniformMatrix4fv(glGetUniformLocation(shader1.program, "projection"), 1, GL_FALSE, &projection[0][0]);
 
@@ -36,50 +38,37 @@ void Update() {
         planets[i].position += planets[i].vel * deltaTime * timeScale;
     }
     
-    std::vector<Planet> previewPlanets;
-    previewPlanets = planets;
+    std::vector<Planet> previewPlanets = planets;
 
     for(int i=0; i<previewPlanets.size(); i++) {
-        previewPlanets[i].emissionStrength = 1.0f;
         if(previewPlanets[i].name == "") {
             previewPlanets.erase(previewPlanets.begin() + i);
+            break;
         }
     }
 
     shader2.Use();
     glUniformMatrix4fv(glGetUniformLocation(shader2.program, "projection"), 1, GL_FALSE, &projection[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(shader2.program, "view"), 1, GL_FALSE, &view[0][0]);
-    for(int k=0; k<10; k++) {
+    for(int k=0; k<predictionDepth; k++) {
         for(int i=0; i<previewPlanets.size(); i++) { // current planet
             for(int j=i; j<previewPlanets.size(); j++) { // other planet
                 UpdatePlanetsVel2(previewPlanets[i], previewPlanets[j], previewTimeStep);
             }
             previewPlanets[i].position += previewPlanets[i].vel * previewTimeStep;
-        
-            /*for(int j=0; j<previewPlanets.size(); j++) { // Removes planet from preview when it starts intersecting with another planet
-                if(previewPlanets[i].name == previewPlanets[j].name)
-                    continue;
-                
-                if(glm::distance(previewPlanets[i].position, previewPlanets[j].position) < previewPlanets[j].scale.x) {
-                    previewPlanets.erase(previewPlanets.begin() + i);
-                }
-            }*/
         }
 
-        for(auto planet : previewPlanets) {
-            Mesh temp{};
-            temp = IcoSphere3;
-            temp.position = planet.position;
-            temp.scale = glm::vec3(0.065f - (0.005f * k));
-            DrawMesh(temp, shader2.program);
+        for(int i=0; i<previewPlanets.size(); i++) {
+            predictMesh[i].position = previewPlanets[i].position;
+            predictMesh[i].scale = glm::vec3(0.065f - (((0.065f-0.01)/predictionDepth) * k));
+            DrawMesh(predictMesh[i], shader2.program);
         }
     }
 
-   /*Mesh temp{};
-    temp = IcoSphere3;
-    temp.position = mainCam.pos + glm::vec3(100000, 0, 0);
-    temp.scale = glm::vec3(10);
-    DrawMesh(temp, shader2.program);*/
+    for(int i=0; i<sizeof(stars)/sizeof(Mesh); i++) {
+        stars[i].position = mainCam.pos + starsPos[i];
+        DrawMesh(stars[i], shader2.program);
+    }
 
 
     // light calculations //
@@ -119,7 +108,7 @@ void Update() {
     {
         glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
         glUniform1i(glGetUniformLocation(shader4.program, "horizontal"), horizontal);
-        glBindTexture(GL_TEXTURE_2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
+        glBindTexture(GL_TEXTURE_2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[!horizontal]);
         
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
