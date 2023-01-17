@@ -2,7 +2,7 @@
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
-#define MAX_LIGHTS 64
+#define MAX_LIGHTS 128
 
 in vec3 Normal;
 in vec3 FragPos;  

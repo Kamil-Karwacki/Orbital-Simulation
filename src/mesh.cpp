@@ -50,6 +50,10 @@ void DrawMesh(Mesh mesh, unsigned int shaderProgram) {
 
 Mesh CreateIcoSphere(unsigned int depth) {
     Mesh mesh;
+    if(depth <= 0) {
+        std::cout << "Cannot create sphere with 0 depth\n";
+        return mesh;
+    }
 
     glm::vec3 vertices[] = {
         glm::vec3( 0.0,  0.0,  1.0), // forward
@@ -262,7 +266,7 @@ Mesh CreateIcoSphere(unsigned int depth) {
         mesh.vertices[i].position = (1.0f/distance) * pointer;
     }
 
-    std::cout << "Created ico sphere vertices: " << mesh.vertices.size() << " indices: " << mesh.indices.size() << " " << glfwGetTime() << "\n";
+    std::cout << "Created ico sphere " << depth << " vertices: " << mesh.vertices.size() << " indices: " << mesh.indices.size() << " " << glfwGetTime() << "\n";
     
     glGenVertexArrays(1, &mesh.VAO);
     glGenBuffers(1, &mesh.VBO);

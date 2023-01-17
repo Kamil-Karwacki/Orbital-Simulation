@@ -32,12 +32,12 @@ void Update() {
 
 
     for(int i=0; i<planets.size(); i++) { // current planet
-        for(int j=0; j<planets.size(); j++) { // other planet
+        for(int j=i; j<planets.size(); j++) { // other planet
             UpdatePlanetsVel(planets[i], planets[j]);
         }
         planets[i].position += planets[i].vel * deltaTime * timeScale;
     }
-    
+
     std::vector<Planet> previewPlanets = planets;
 
     for(int i=0; i<previewPlanets.size(); i++) {
@@ -78,7 +78,7 @@ void Update() {
         if(planets[i].name == "")
             continue;
 
-        std::string num = std::to_string(i);
+        std::string num = std::to_string(n);
         if(planets[i].emissionStrength > 0.0f) {
             shader1.Use();
             glUniform3f(glGetUniformLocation(shader1.program, std::string("light["+num+"].col").c_str()), planets[i].emissionCol.x, planets[i].emissionCol.y, planets[i].emissionCol.z);
@@ -92,13 +92,25 @@ void Update() {
             shader2.Use();
             DrawPlanet(planets[i], shader2.program);
         }
+    }
+
+    for(int i=n; i<128; i++) {
+        shader1.Use();
+        std::string num = std::to_string(i);
+        glUniform1f(glGetUniformLocation(shader1.program, std::string("light["+num+"].strength").c_str()), 0.0f);
+    }
+
+    for(int i=0; i<planets.size(); i++) {
+        if(planets[i].name == "")
+            continue;
+
         if(planets[i].emissionStrength <= 0.0f) {
             shader1.Use();
-            glUniform1f(glGetUniformLocation(shader1.program, std::string("light["+num+"].strength").c_str()), 0.0f);
-
             DrawPlanet(planets[i], shader1.program);
         }
     }
+
+
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -133,6 +145,5 @@ void Update() {
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
-
     DrawUI();
 }

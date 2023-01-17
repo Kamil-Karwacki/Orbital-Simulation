@@ -34,6 +34,9 @@ inline bool MouseRaycast() {
     glm::vec3 ray_wor = glm::inverse(view) * ray_eye;
     ray_wor = glm::normalize(ray_wor);
     float ray_length = 10.0f;
+
+    float highestDelta = 0.0f;
+    Planet* closestPlanet = nullptr;
     
     for(int i=0; i<planets.size(); i++) {
         if(planets[i].name == "")
@@ -48,13 +51,18 @@ inline bool MouseRaycast() {
         float d1 = (-b-sqrt(delta))/(2*a);
         float d2 = (-b+sqrt(delta))/(2*a);
         std::cout << "Delta " << delta << " d1 " << d1 << " d2 " << d2 << "\n" << planets[i].name << "\n\n";
-        if(delta >= 0.0f && (d1 > 0.0f || d2 > 0.0f)) {
+        if(delta >= highestDelta && (d1 > 0.0f || d2 > 0.0f)) {
             std::cout << "Hit " << planets[i].name << "\n";
-            currentPlanet = &planets[i];
-            distFromPlanet = planets[i].scale.x * 3.0f;
-            return true;
+            closestPlanet = &planets[i];
         }
     }
+    if(closestPlanet) {
+        std::cout << "End " << closestPlanet->name << "\n";
+        distFromPlanet = closestPlanet->scale.x * 3.0f;
+        currentPlanet = closestPlanet;
+        return true;
+    }
+
     if(!io.WantCaptureMouse)
         currentPlanet = nullptr;
     return false;

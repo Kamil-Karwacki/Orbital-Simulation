@@ -66,9 +66,9 @@ void Start() {
     earthData.mass = 81000;
     earthData.radius = 1.0f;
     earthData.pos = glm::vec3(0.0f);
-    earthData.vel = glm::vec3(0.0075f, 0.00f, 0.0f);
+    earthData.vel = glm::vec3(0.0055f, 0.00f, 0.0f);
     earthData.col =  glm::vec4(0.0f, 0.7f, 0.0f, 1.0f);
-    earthData.depth = 60;
+    earthData.depth = 50;
     Planet earth(earthData);
 
     PlanetData sunData{};

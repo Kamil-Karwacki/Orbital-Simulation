@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "mesh.hpp"
+#include "globals.hpp"
 
 struct PlanetData {
     std::string name;
@@ -96,7 +97,8 @@ struct UI_update {
     bool firstRun = true; // should planet data be updated into ui
     bool regeneratePlanet = false; // should planets mesh be regenerated
     float windowWidth = 200;
-    unsigned int LOD;
+    unsigned int LOD, oldLOD;
+    bool regenerateButton = false; // should show button to regenerate planet
 };
 
 

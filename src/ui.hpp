@@ -9,3 +9,6 @@ inline uint16_t errorCode;
 inline std::string errorText;
 
 void DrawUI();
+void CreatePlanet();
+void ManipulationWindow();
+void UpdatePlanet();
