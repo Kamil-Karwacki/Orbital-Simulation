@@ -38,7 +38,6 @@ public:
     glm::vec3 scale = glm::vec3(1.0f);
     uint32_t depth;
 
-    float noiseStrength = 0.2f;
     uint32_t seed;
     std::vector<Noise> noises;
     std::vector<HeightCol> heights;
@@ -54,6 +53,7 @@ void UpdatePlanetsVel2(Planet &planet1, Planet &planet2, float timeStep);
 void SelectPlanet();
 void UpdateColors(Planet &planet);
 void ApplyNoise(Planet& planet, Noise noise);
+void CreateBasicPlanets();
 
 struct UI_create {
     bool createPlanet = false; // is user creating planet

@@ -9,15 +9,19 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include <glm/gtx/io.hpp>
+#include "ui.hpp"
 
 
 void ProcessInput(GLFWwindow* window) {
     ImGuiIO &io = ImGui::GetIO();
+
+    if(MainMenu::mainMenu || Menu::menu)
+        return;
+
     if(!io.WantCaptureKeyboard) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             if(currentPlanet || ui_create.createPlanet) {
-                float minDistance = currentPlanet ? currentPlanet->scale.x : ui_create.previewPlanet->scale.x;
-                minDistance *= 2.0f;
+                float minDistance = currentPlanet ? currentPlanet->scale.x * 2.0f : ui_create.previewPlanet->scale.x * 2.0f;
                 distFromPlanet = std::clamp(distFromPlanet - deltaTime * distFromPlanet, minDistance, 10000.0f);
             }
 
@@ -29,7 +33,6 @@ void ProcessInput(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             if(currentPlanet || ui_create.createPlanet) {
                 float minDistance = currentPlanet ? currentPlanet->scale.x : ui_create.previewPlanet->scale.x;
-                minDistance *= 2.0f;
                 distFromPlanet = std::clamp(distFromPlanet + deltaTime * distFromPlanet, minDistance, 10000.0f);
             }
 
@@ -44,8 +47,6 @@ void ProcessInput(GLFWwindow* window) {
             mainCam.pos += glm::normalize(glm::cross(mainCam.front, mainCam.up)) * mainCam.speed * deltaTime;
     }
 
-
-    
 
     if(!io.WantCaptureMouse) {
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
@@ -77,52 +78,32 @@ void MouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
     cursorY = yposIn;
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) != GLFW_PRESS) {
-        lastX = xpos;
-        lastY = ypos;
-        return;
-    }
 
-    
-    if (firstMouse)
-    {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
     }
 
+
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) != GLFW_PRESS || Menu::menu || MainMenu::mainMenu) {
+        lastX = xpos;
+        lastY = ypos;
+        return;
+    }
+
+
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - ypos;
 
-    if(currentPlanet) { 
+    if(currentPlanet) 
         RotateAroundPoint(currentPlanet->position, xoffset, yoffset);
-    } 
-    if(ui_create.createPlanet) {
-        RotateAroundPoint(ui_create.previewPlanet->position, xoffset, yoffset);
-    }
     
-    if(!currentPlanet && !ui_create.createPlanet){
-        float sensitivity = 0.1f;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
-
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        mainCam.front = glm::normalize(front);
-
-        if(yaw > 360) yaw-=360;
-        if(yaw < 0) yaw+=360;
-    }
+    if(ui_create.createPlanet) 
+        RotateAroundPoint(ui_create.previewPlanet->position, xoffset, yoffset);
+    
+    RotateCamera(xoffset, yoffset);
+    
     lastX = xpos;
     lastY = ypos;
 }
@@ -166,7 +147,39 @@ void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset) {
     pitch = tempPitch;
 }
 
-void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    
+void RotateCamera(double xoffset, double yoffset) {
+    if(currentPlanet || ui_create.createPlanet)
+        return;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    mainCam.front = glm::normalize(front);
+
+    if(yaw > 360) yaw-=360;
+    if(yaw < 0) yaw+=360;
+}
+
+void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    ImGuiIO &io = ImGui::GetIO();
+    if(!currentPlanet || !ui_create.previewPlanet || io.WantCaptureMouse)
+        return;
+    float minDistance = currentPlanet ? currentPlanet->scale.x * 2.0f : ui_create.previewPlanet->scale.x * 2.0f;
+    if(yoffset < 0)
+        distFromPlanet = std::clamp(distFromPlanet + 70 * deltaTime * distFromPlanet, minDistance, 10000.0f);
+    else
+        distFromPlanet = std::clamp(distFromPlanet - 70 * deltaTime * distFromPlanet, minDistance, 10000.0f);
 }

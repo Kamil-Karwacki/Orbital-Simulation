@@ -8,6 +8,7 @@
 #include "shader.hpp"
 #include "input.hpp"
 #include "planet.hpp"
+#include "ui.hpp"
 
 GLFWwindow* InitGLFW(int screenWidth, int screenHeight) {
     glfwSetErrorCallback(GlfwErrorCallback);
@@ -82,6 +83,20 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
     if (key == GLFW_KEY_Z && action == GLFW_PRESS)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     if (key == GLFW_KEY_X && action == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        if(!Menu::menu) {
+            oldTimeScale = timeScale;
+            timeScale = 0;
+        }
+        if(Menu::menu) {
+            timeScale = oldTimeScale;
+        }
+        Menu::menu = !Menu::menu;
+        Menu::options = false;
+        Menu::exportScene = false;
+    }
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

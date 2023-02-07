@@ -50,6 +50,9 @@ void UpdatePlanetsVel(Planet &planet1, Planet &planet2) {
         return;
     glm::vec3 forceDir = planet1.position - planet2.position;
     glm::vec3 force = (glm::normalize(forceDir) * GRAVITATIONAL_CONST * planet1.mass * planet2.mass) / glm::distance2(planet1.position, planet2.position);
+    if(glm::distance(planet1.position, planet2.position) < planet1.scale.x + planet2.scale.x) {
+        force = glm::vec3(0);
+    }
     glm::vec3 acceleration1 = -force / planet1.mass;
     glm::vec3 acceleration2 = force / planet2.mass;
     planet1.vel += acceleration1 * deltaTime * timeScale;
@@ -60,7 +63,10 @@ void UpdatePlanetsVel2(Planet &planet1, Planet &planet2, float timeStep) {
     if(planet1.name == planet2.name || planet1.mass == 0 || planet2.mass == 0)
         return;
     glm::vec3 forceDir = planet1.position - planet2.position;
-    glm::vec3 force = (glm::normalize(forceDir) * GRAVITATIONAL_CONST * planet1.mass * planet2.mass) / glm::distance2(planet1.position, planet2.position);
+    glm::vec3 force = glm::vec3(0);
+    if(glm::distance(planet1.position, planet2.position) > planet1.scale.x + planet2.scale.x) 
+        force = (glm::normalize(forceDir) * GRAVITATIONAL_CONST * planet1.mass * planet2.mass) / glm::distance2(planet1.position, planet2.position);
+    
     glm::vec3 acceleration1 = -force / planet1.mass;
     glm::vec3 acceleration2 = force / planet2.mass;
     planet1.vel += acceleration1 * timeStep;
@@ -139,4 +145,44 @@ void ApplyNoise(Planet& planet, Noise noise) {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::normal));
 
     glBindVertexArray(0);
+}
+
+void CreateBasicPlanets() {
+     PlanetData earthData{};
+    earthData.name = "earth";
+    earthData.mass = 81000;
+    earthData.radius = 1.0f;
+    earthData.pos = glm::vec3(0.0f, 0.0f, 1.0f);
+    earthData.vel = glm::vec3(0.0075f, 0.00f, 0.0f);
+    earthData.col =  glm::vec4(0.0f, 0.7f, 0.0f, 1.0f);
+    earthData.depth = 50;
+    Planet earth(earthData);
+
+    PlanetData sunData{};
+    sunData.name = "sun";
+    sunData.mass = 7 * 810000;
+    sunData.radius = 3.0f;
+    sunData.pos = glm::vec3(6.0f);
+    sunData.vel = glm::vec3(0.0f);
+    sunData.col = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+    sunData.emissionCol = glm::vec4(1.0f);
+    sunData.emissionStrength = 1000;
+    sunData.depth = 40;
+    sunData.seed = 100;
+    Planet sun(sunData);
+
+    PlanetData tempData{};
+    tempData.name = "";
+    tempData.mass = 0;
+    tempData.radius = 0;
+    tempData.pos = glm::vec3(0.0f);
+    tempData.vel = glm::vec3(0.0f);
+    tempData.col = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+    tempData.emissionCol = glm::vec4(1.0f);
+    tempData.emissionStrength = 0;
+    tempData.depth = 40;
+    ui_create.previewPlanet = new Planet(tempData);
+    ui_create.heights = ui_create.previewPlanet->heights;
+
+    predictMesh.resize(planets.size(), IcoSphere3);
 }

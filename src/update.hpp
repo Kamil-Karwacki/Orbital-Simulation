@@ -40,18 +40,32 @@ void Update() {
 
     std::vector<Planet> previewPlanets = planets;
 
-    for(int i=0; i<previewPlanets.size(); i++) {
-        if(previewPlanets[i].name == "") {
-            previewPlanets.erase(previewPlanets.begin() + i);
-            break;
+    if(ui_create.createPlanet || currentPlanet) {
+        for(int i=0; i<previewPlanets.size(); i++) {
+            if(previewPlanets[i].name == "" && ui_create.createPlanet) {
+                previewPlanets[i].mass = ui_create.mass;
+                previewPlanets[i].vel = glm::vec3(ui_create.vel[0], ui_create.vel[1], ui_create.vel[2]);
+                previewPlanets[i].position = glm::vec3(ui_create.pos[0], ui_create.pos[1], ui_create.pos[2]);
+            }
+
+            if(!currentPlanet)
+                continue;
+            bool changedVelocity = ui_update.vel[0] != currentPlanet->vel.x || ui_update.vel[1] != currentPlanet->vel.y || ui_update.vel[2] != currentPlanet->vel.z;
+            if(previewPlanets[i].name == currentPlanet->name && changedVelocity) { 
+                previewPlanets[i].vel = glm::vec3(ui_update.vel[0], ui_update.vel[1], ui_update.vel[2]);
+            }
         }
     }
+
 
     shader2.Use();
     glUniformMatrix4fv(glGetUniformLocation(shader2.program, "projection"), 1, GL_FALSE, &projection[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(shader2.program, "view"), 1, GL_FALSE, &view[0][0]);
     for(int k=0; k<predictionDepth; k++) {
         for(int i=0; i<previewPlanets.size(); i++) { // current planet
+            if(previewPlanets[i].name == "" && !ui_create.createPlanet)
+                continue;
+
             for(int j=i; j<previewPlanets.size(); j++) { // other planet
                 UpdatePlanetsVel2(previewPlanets[i], previewPlanets[j], previewTimeStep);
             }
@@ -59,6 +73,9 @@ void Update() {
         }
 
         for(int i=0; i<previewPlanets.size(); i++) {
+            if(previewPlanets[i].name == "" && !ui_create.createPlanet) 
+                continue;
+
             predictMesh[i].position = previewPlanets[i].position;
             predictMesh[i].scale = glm::vec3(0.065f - (((0.065f-0.01)/predictionDepth) * k));
             DrawMesh(predictMesh[i], shader2.program);

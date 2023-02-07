@@ -50,14 +50,11 @@ inline bool MouseRaycast() {
         float delta = b*b - 4*a*c;
         float d1 = (-b-sqrt(delta))/(2*a);
         float d2 = (-b+sqrt(delta))/(2*a);
-        std::cout << "Delta " << delta << " d1 " << d1 << " d2 " << d2 << "\n" << planets[i].name << "\n\n";
         if(delta >= highestDelta && (d1 > 0.0f || d2 > 0.0f)) {
-            std::cout << "Hit " << planets[i].name << "\n";
             closestPlanet = &planets[i];
         }
     }
     if(closestPlanet) {
-        std::cout << "End " << closestPlanet->name << "\n";
         distFromPlanet = closestPlanet->scale.x * 3.0f;
         currentPlanet = closestPlanet;
         return true;
