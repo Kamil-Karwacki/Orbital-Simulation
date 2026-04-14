@@ -1,11 +1,12 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <vector>
-#include <string>
-#include "mesh.hpp"
 #include "globals.hpp"
+#include "mesh.hpp"
+#include <glm/glm.hpp>
+#include <string>
+#include <vector>
 
-struct PlanetData {
+struct PlanetData
+{
     std::string name;
     float mass;
     float radius = 1.0f;
@@ -18,13 +19,15 @@ struct PlanetData {
     uint32_t depth;
 };
 
-struct HeightCol {
+struct HeightCol
+{
     float height;
     float col[3];
 };
 
-class Planet {
-public:
+class Planet
+{
+  public:
     Planet(PlanetData data);
     std::string name;
     Mesh mesh;
@@ -44,20 +47,20 @@ public:
     std::vector<glm::vec3> appliedNoise;
 };
 
-
 inline std::vector<Planet> planets;
-inline Planet* currentPlanet;
+inline Planet *currentPlanet;
 void DrawPlanet(Planet planet, unsigned int shaderProgram);
 void UpdatePlanetsVel(Planet &planet1, Planet &planet2);
 void UpdatePlanetsVel2(Planet &planet1, Planet &planet2, float timeStep);
 void SelectPlanet();
 void UpdateColors(Planet &planet);
-void ApplyNoise(Planet& planet, Noise noise);
+void ApplyNoise(Planet &planet, Noise noise);
 void CreateBasicPlanets();
 
-struct UI_create {
+struct UI_create
+{
     bool createPlanet = false; // is user creating planet
-    bool canCreatePlanet; // can user create planet
+    bool canCreatePlanet;      // can user create planet
 
     char buf[255];
     float mass = 0;
@@ -69,10 +72,10 @@ struct UI_create {
     double seed = 0;
     float noiseStrength = 0.2f;
     uint32_t octaves = 2, persistance = 2;
-    Planet* previewPlanet;
+    Planet *previewPlanet;
     std::vector<Noise> noises;
     std::vector<HeightCol> heights;
-    bool regeneratePlanet; // should planets mesh be regenerated
+    bool regeneratePlanet;       // should planets mesh be regenerated
     bool changedParams1 = false; // has user changed one of parameters
 
     float windowWidth = 300;
@@ -80,7 +83,8 @@ struct UI_create {
     bool regenerateButton = false; // should show button to regenerate planet
 };
 
-struct UI_update {
+struct UI_update
+{
     float mass;
     float vel[3];
     float emissionStrength;
@@ -88,19 +92,17 @@ struct UI_update {
     float col[4];
     float radius;
 
-
     std::vector<Noise> noises;
     Noise tempNoise{}, lastTempNoise{};
     std::vector<HeightCol> heights;
     HeightCol tempHeightCol{};
 
-    bool firstRun = true; // should planet data be updated into ui
-    bool regeneratePlanet = false; // should planets mesh be regenerated
+    bool firstRun = true;          // will planet data be updated into ui
+    bool regeneratePlanet = false; // will planets mesh be regenerated
     float windowWidth = 200;
     unsigned int LOD, oldLOD;
-    bool regenerateButton = false; // should show button to regenerate planet
+    bool regenerateButton = false; // show button to regenerate planet
 };
-
 
 inline UI_create ui_create{};
 inline UI_update ui_update{};

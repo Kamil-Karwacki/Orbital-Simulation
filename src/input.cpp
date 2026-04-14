@@ -1,114 +1,136 @@
-#include <iostream>
-#include <algorithm>
 #include "input.hpp"
 #include "globals.hpp"
 #include "planet.hpp"
+#include <algorithm>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
-#include <glm/gtx/io.hpp>
 #include "ui.hpp"
 
-
-void ProcessInput(GLFWwindow* window) {
+void ProcessInput(GLFWwindow *window)
+{
     ImGuiIO &io = ImGui::GetIO();
 
-    if(MainMenu::mainMenu || Menu::menu)
+    if (MainMenu::mainMenu || Menu::menu)
         return;
 
-    if(!io.WantCaptureKeyboard) {
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            if(currentPlanet || ui_create.createPlanet) {
-                float minDistance = currentPlanet ? currentPlanet->scale.x * 2.0f : ui_create.previewPlanet->scale.x * 2.0f;
-                distFromPlanet = std::clamp(distFromPlanet - deltaTime * distFromPlanet, minDistance, 10000.0f);
+    if (!io.WantCaptureKeyboard)
+    {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            if (currentPlanet || ui_create.createPlanet)
+            {
+                float minDistance =
+                    currentPlanet ? currentPlanet->scale.x * 2.0f
+                                  : ui_create.previewPlanet->scale.x * 2.0f;
+                distFromPlanet =
+                    std::clamp(distFromPlanet - deltaTime * distFromPlanet,
+                               minDistance, 10000.0f);
             }
 
-            if(!currentPlanet && !ui_create.createPlanet) {
+            if (!currentPlanet && !ui_create.createPlanet)
+            {
                 mainCam.pos += mainCam.speed * mainCam.front * deltaTime;
             }
         }
 
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            if(currentPlanet || ui_create.createPlanet) {
-                float minDistance = currentPlanet ? currentPlanet->scale.x : ui_create.previewPlanet->scale.x;
-                distFromPlanet = std::clamp(distFromPlanet + deltaTime * distFromPlanet, minDistance, 10000.0f);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            if (currentPlanet || ui_create.createPlanet)
+            {
+                float minDistance = currentPlanet
+                                        ? currentPlanet->scale.x
+                                        : ui_create.previewPlanet->scale.x;
+                distFromPlanet =
+                    std::clamp(distFromPlanet + deltaTime * distFromPlanet,
+                               minDistance, 10000.0f);
             }
 
-            if(!currentPlanet && !ui_create.createPlanet) {
+            if (!currentPlanet && !ui_create.createPlanet)
+            {
                 mainCam.pos -= mainCam.speed * mainCam.front * deltaTime;
             }
         }
-        
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && (!currentPlanet && !ui_create.createPlanet))
-            mainCam.pos -= glm::normalize(glm::cross(mainCam.front, mainCam.up)) * mainCam.speed * deltaTime;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && (!currentPlanet && !ui_create.createPlanet))
-            mainCam.pos += glm::normalize(glm::cross(mainCam.front, mainCam.up)) * mainCam.speed * deltaTime;
+
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS &&
+            (!currentPlanet && !ui_create.createPlanet))
+            mainCam.pos -=
+                glm::normalize(glm::cross(mainCam.front, mainCam.up)) *
+                mainCam.speed * deltaTime;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS &&
+            (!currentPlanet && !ui_create.createPlanet))
+            mainCam.pos +=
+                glm::normalize(glm::cross(mainCam.front, mainCam.up)) *
+                mainCam.speed * deltaTime;
     }
 
-
-    if(!io.WantCaptureMouse) {
+    if (!io.WantCaptureMouse)
+    {
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
             mainCam.speed = 1.0f;
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
             mainCam.speed = 5.0f;
-        
-        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         else
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-
     glm::vec3 point = glm::vec3(0);
-    if(currentPlanet)
+    if (currentPlanet)
         point = currentPlanet->position;
-    if(ui_create.createPlanet)
+    if (ui_create.createPlanet)
         point = ui_create.previewPlanet->position;
-    
-    if(glm::length(point) > 0) {
+
+    if (glm::length(point) > 0)
+    {
         glm::vec3 abc = glm::normalize(mainCam.pos - point);
         mainCam.pos = point + abc * distFromPlanet;
     }
 }
 
-void MouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
+void MouseCallback(GLFWwindow *window, double xposIn, double yposIn)
+{
     cursorX = xposIn;
     cursorY = yposIn;
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (firstMouse) {
+    if (firstMouse)
+    {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
     }
 
-
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) != GLFW_PRESS || Menu::menu || MainMenu::mainMenu) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) != GLFW_PRESS ||
+        Menu::menu || MainMenu::mainMenu)
+    {
         lastX = xpos;
         lastY = ypos;
         return;
     }
 
-
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos;
 
-    if(currentPlanet) 
+    if (currentPlanet)
         RotateAroundPoint(currentPlanet->position, xoffset, yoffset);
-    
-    if(ui_create.createPlanet) 
+
+    if (ui_create.createPlanet)
         RotateAroundPoint(ui_create.previewPlanet->position, xoffset, yoffset);
-    
+
     RotateCamera(xoffset, yoffset);
-    
+
     lastX = xpos;
     lastY = ypos;
 }
 
-void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset) {
+void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset)
+{
     // https://asliceofrendering.com/camera/2019/11/30/ArcballCamera/
     glm::vec3 viewDir = glm::normalize(point - mainCam.pos);
     glm::vec3 upVector = glm::vec3(0, 1, 0);
@@ -122,9 +144,9 @@ void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset) {
     float yAngle = yoffset * deltaAngleY;
 
     float cosAngle = glm::dot(point - mainCam.pos, upVector);
-    if(cosAngle * glm::sign(yAngle) > 0.99f) 
+    if (cosAngle * glm::sign(yAngle) > 0.99f)
         deltaAngleY = 0;
-    
+
     glm::mat4x4 rotationMatrixX(1.0f);
     rotationMatrixX = glm::rotate(rotationMatrixX, xAngle, upVector);
     position = (rotationMatrixX * (position - pivot)) + pivot;
@@ -134,21 +156,28 @@ void RotateAroundPoint(glm::vec3 point, float xoffset, float yoffset) {
     position = (rotationMatrixY * (position - pivot)) + pivot;
 
     mainCam.pos = glm::vec3(position.x, position.y, position.z);
-    mainCam.front = glm::normalize(point - glm::vec3(position.x, position.y, position.z));
+    mainCam.front =
+        glm::normalize(point - glm::vec3(position.x, position.y, position.z));
 
-    // update yaw and pitch to avoid jumping when unfocusing from planet // 
-    float tempYaw = 90.0f - glm::degrees(atan2(mainCam.front.x, mainCam.front.z));
-    float tempPitch = glm::degrees(atan2(mainCam.front.y, sqrt(mainCam.front.x * mainCam.front.x + mainCam.front.z * mainCam.front.z)));
+    // update yaw and pitch to avoid jumping when unfocusing from planet //
+    float tempYaw =
+        90.0f - glm::degrees(atan2(mainCam.front.x, mainCam.front.z));
+    float tempPitch = glm::degrees(
+        atan2(mainCam.front.y, sqrt(mainCam.front.x * mainCam.front.x +
+                                    mainCam.front.z * mainCam.front.z)));
 
-    if(tempYaw > 360) tempYaw-=360;
-    if(tempYaw < 0) tempYaw+=360;
+    if (tempYaw > 360)
+        tempYaw -= 360;
+    if (tempYaw < 0)
+        tempYaw += 360;
 
     yaw = tempYaw;
     pitch = tempPitch;
 }
 
-void RotateCamera(double xoffset, double yoffset) {
-    if(currentPlanet || ui_create.createPlanet)
+void RotateCamera(double xoffset, double yoffset)
+{
+    if (currentPlanet || ui_create.createPlanet)
         return;
 
     float sensitivity = 0.1f;
@@ -169,17 +198,25 @@ void RotateCamera(double xoffset, double yoffset) {
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     mainCam.front = glm::normalize(front);
 
-    if(yaw > 360) yaw-=360;
-    if(yaw < 0) yaw+=360;
+    if (yaw > 360)
+        yaw -= 360;
+    if (yaw < 0)
+        yaw += 360;
 }
 
-void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+void ScrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+{
     ImGuiIO &io = ImGui::GetIO();
-    if(!currentPlanet || !ui_create.previewPlanet || io.WantCaptureMouse)
+    if (!currentPlanet || !ui_create.previewPlanet || io.WantCaptureMouse)
         return;
-    float minDistance = currentPlanet ? currentPlanet->scale.x * 2.0f : ui_create.previewPlanet->scale.x * 2.0f;
-    if(yoffset < 0)
-        distFromPlanet = std::clamp(distFromPlanet + 70 * deltaTime * distFromPlanet, minDistance, 10000.0f);
+    float minDistance = currentPlanet ? currentPlanet->scale.x * 2.0f
+                                      : ui_create.previewPlanet->scale.x * 2.0f;
+    if (yoffset < 0)
+        distFromPlanet =
+            std::clamp(distFromPlanet + 70 * deltaTime * distFromPlanet,
+                       minDistance, 10000.0f);
     else
-        distFromPlanet = std::clamp(distFromPlanet - 70 * deltaTime * distFromPlanet, minDistance, 10000.0f);
+        distFromPlanet =
+            std::clamp(distFromPlanet - 70 * deltaTime * distFromPlanet,
+                       minDistance, 10000.0f);
 }

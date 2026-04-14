@@ -1,2 +1,11 @@
-.vscode/*
-.VSCodeCounter/*
+build/
+out/
+bin/
+scenes/
+
+.vs/
+.idea/
+*.user
+*.suo
+.clang-format
+.cache
