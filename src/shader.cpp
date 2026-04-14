@@ -58,7 +58,7 @@ std::string Shader::ReadFile(const char* path) {
     std::cout << "Loading shader " << path << "\n";
     std::ifstream file(path, std::ios::in | std::ios::binary);
     if (!file)
-        throw std::runtime_error(std::string("Couldnt read shader file:") + path);
+        throw std::runtime_error(std::string("Couldn't read shader file:") + path);
 
     std::string contents;
     file.seekg(0, std::ios::end);
