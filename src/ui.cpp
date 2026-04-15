@@ -1279,6 +1279,7 @@ void ImportScene(std::string fileName)
 
         Planet temp(planetData);
 
+        planets.back().noises = noises;
         planets.back().heights = heights;
 
         for (int i = 0; i < noises.size(); i++)
