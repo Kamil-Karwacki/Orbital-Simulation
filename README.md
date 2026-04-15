@@ -1,5 +1,9 @@
 #  Orbital Simulation (C++ / OpenGL)
 
+
+https://github.com/user-attachments/assets/cec1b26f-7388-4e79-b700-71e8c5ba032a
+
+
 A real-time 3D orbital simulation of a solar system (N-body problem) built with C++ and OpenGL. The project features a fully interactive UI to create, modify, and observe planetary bodies in space.
 
 ##  Features
