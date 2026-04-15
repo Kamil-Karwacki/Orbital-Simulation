@@ -40,14 +40,11 @@ void InitOpenGL()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_CULL_FACE);
-    shader1.Init("./src/shaders/shader.vert", "./src/shaders/shader.frag");
-    shader2.Init("./src/shaders/EmissionShader.vert",
-                 "./src/shaders/EmissionShader.frag");
-    shader3.Init("./src/shaders/framebuffer.vert",
-                 "./src/shaders/framebuffer.frag");
-    shader4.Init("./src/shaders/blur.vert", "./src/shaders/blur.frag");
-    shader5.Init("./src/shaders/framebuffer.vert",
-                 "./src/shaders/framebuffer.frag");
+    shader1.Init("shaders/shader.vert", "shaders/shader.frag");
+    shader2.Init("shaders/EmissionShader.vert", "shaders/EmissionShader.frag");
+    shader3.Init("shaders/framebuffer.vert", "shaders/framebuffer.frag");
+    shader4.Init("shaders/blur.vert", "shaders/blur.frag");
+    shader5.Init("shaders/framebuffer.vert", "shaders/framebuffer.frag");
     shader1.Use();
 
     GenerateFramebuffers();
