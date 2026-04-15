@@ -690,7 +690,7 @@ void UpdatePlanet()
             ui_update.tempNoise.seed != ui_update.lastTempNoise.seed ||
             ui_update.tempNoise.strength != ui_update.lastTempNoise.strength)
         {
-            ApplyNoise(*currentPlanet, ui_update.tempNoise);
+            ui_update.regeneratePlanet = true;
             ui_update.lastTempNoise = ui_update.tempNoise;
         }
 

@@ -1,10 +1,8 @@
-#include <random>
 #define GLFW_INCLUDE_NONE
 #define GLM_ENABLE_EXPERIMENTAL
+#include "planet.hpp"
 #include "globals.hpp"
 #include "math.hpp"
-#include "planet.hpp"
-#include <algorithm>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/norm.hpp>
@@ -139,9 +137,6 @@ void UpdateColors(Planet &planet)
 
 void ApplyNoise(Planet &planet, Noise noise)
 {
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(std::begin(p), std::end(p), g);
     if (noise.octaves <= 0)
         return;
 

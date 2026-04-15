@@ -1,7 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
-struct Camera {
+struct Camera
+{
     glm::vec3 pos = glm::vec3(-5.0f, 2.0f, 8.0f);
     glm::vec3 rot;
     float speed = 5.0f;
